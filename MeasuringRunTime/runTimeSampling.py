@@ -46,9 +46,9 @@ if __name__=='__main__':
     # log=True and sample_step=0.001 generates very biased results.
     # log=True and sample_step=0.01 also generates biased results
     # log=False and sample_step=0.01 is good.
-    log=False
-    sample_step=0.01
-    n=1000    # number of samples
+    log=False           # True = print log while running
+    sample_step=0.01    # Mean length of sampling step
+    n=1000              # number of samples
 
     state=[0]
     # Create a parallel thread running the app
