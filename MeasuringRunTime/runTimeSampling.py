@@ -16,6 +16,7 @@ def app(state,scale,stop,log=True):
     initial_time=time.time();
     last_time=initial_time
     Total1=0; Total2=0; Total3=0;
+    # app loop
     while not stop.is_set():
         state[0]=1; 
         if log: print_state(state, initial_time, 'switch to state 1')
@@ -61,6 +62,7 @@ if __name__=='__main__':
 
     timer=time.time()    
     count=[0]*4
+    # Sampling loop
     for i in range(n):
         if log:
             ntime=time.time()
