@@ -42,19 +42,38 @@ def app(state,scale,stop,log=True):
     print 'Frac1=%5.2f, Frac2=%5.2f, Frac3=%5.2f' % (Total1/Sum_Total,Total2/Sum_Total,Total3/Sum_Total)
 
 if __name__=='__main__':
+
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Demonstration of sampling method ')
+
+    parser.add_argument('-s','--sample_step', type=float, default='0.01',
+                        help='the expected time between consecutive samples')
+    parser.add_argument('-n','--n',type=int, default=100,
+                        help='number os samples')
+    parser.add_argument('-i','--Iteration_Length', type=int, default='10000',
+                        help='Length of each inner loop in app')
+    parser.add_argument('-l','--log',action='store_true',default=False,
+                        help='Log loops and samples as they occur (if False, only summary is printed)')
+
+    args = vars(parser.parse_args())
+    print args
     # log=True and sample_step=0.001 generates very biased results.
     # log=True and sample_step=0.01 also generates biased results
     # log=False and sample_step=0.01 is good.
-    log=False
-    sample_step=0.01
-    n=1000    # number of samples
+
+
+    log=args['log']
+    sample_step=args['sample_step']
+    Iteration_Length=args['Iteration_Length']
+    n=args['n']
 
     state=[0]
     # Create a parallel thread running the app
     try:
         stop = threading.Event()
         stop.clear()
-        t = threading.Thread(target=app, args = (state,100,stop), kwargs={'log':log})
+        t = threading.Thread(target=app, args = (state,Iteration_Length,stop), kwargs={'log':log})
         t.start()
     except:
         print "Error: unable to start thread"
