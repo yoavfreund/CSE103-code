@@ -16,6 +16,7 @@ def app(state,scale,stop,log=True):
     initial_time=time.time();
     last_time=initial_time
     Total1=0; Total2=0; Total3=0;
+    # app loop ##############################################################################
     while not stop.is_set():
         state[0]=1; 
         if log: print_state(state, initial_time, 'switch to state 1')
@@ -34,6 +35,7 @@ def app(state,scale,stop,log=True):
         for j in range(scale*2):
             a=math.log(j+1)
         now=time.time(); Total3 += now-last_time; last_time=now
+    ##########################################################################################
     
     print 'app stopped after ',time.time()-initial_time, 'seconds'
     print 'Total1=%5.2f, Total2=%5.2f, Total3=%5.2f' % (Total1,Total2,Total3)
@@ -61,8 +63,6 @@ if __name__=='__main__':
     # log=True and sample_step=0.001 generates very biased results.
     # log=True and sample_step=0.01 also generates biased results
     # log=False and sample_step=0.01 is good.
-
-
     log=args['log']
     sample_step=args['sample_step']
     Iteration_Length=args['Iteration_Length']
@@ -80,6 +80,7 @@ if __name__=='__main__':
 
     timer=time.time()    
     count=[0]*4
+    # Sampling loop   ########################################################################
     for i in range(n):
         if log:
             ntime=time.time()
@@ -89,6 +90,7 @@ if __name__=='__main__':
             
         count[state[0]] += 1
         time.sleep(exponential(sample_step))
+    ##########################################################################################
 
     stop.set()     # send event to thread to cause it to terminate.
     time.sleep(0.5)
