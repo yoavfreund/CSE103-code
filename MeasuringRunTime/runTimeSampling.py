@@ -1,22 +1,18 @@
 #!/usr/bin/python
-# This python script demonstrates the use of sampling to estimate the execution time of software.
+# This python script demonstrates the use of sampling to estimate the
+# execution time of software.
 
 import threading
 import time
 import math
 from numpy.random import exponential
 
-# Define a function for the thread
-
-def print_state(state, initial, message):
-    print "%6.4f: state=%1d \t%s" % (time.time()-initial,state[0],message)
-
 def app(state,scale,stop,log=True):
     print "App Started"
     initial_time=time.time();
     last_time=initial_time
     Total1=0; Total2=0; Total3=0;
-    # app loop ##############################################################################
+    # app loop ###############################################################
     while not stop.is_set():
         state[0]=1; 
         if log: print_state(state, initial_time, 'switch to state 1')
@@ -43,6 +39,9 @@ def app(state,scale,stop,log=True):
     print 'Sum Total=',Sum_Total
     print 'Frac1=%5.2f, Frac2=%5.2f, Frac3=%5.2f' % (Total1/Sum_Total,Total2/Sum_Total,Total3/Sum_Total)
 
+def print_state(state, initial, message):
+    print "%6.4f: state=%1d \t%s" % (time.time()-initial,state[0],message)
+
 if __name__=='__main__':
 
     import argparse
@@ -53,7 +52,7 @@ if __name__=='__main__':
                         help='the expected time between consecutive samples')
     parser.add_argument('-n','--n',type=int, default=100,
                         help='number os samples')
-    parser.add_argument('-i','--Iteration_Length', type=int, default='10000',
+    parser.add_argument('-i','--Iteration_Length', type=int, default='100',
                         help='Length of each inner loop in app')
     parser.add_argument('-l','--log',action='store_true',default=False,
                         help='Log loops and samples as they occur (if False, only summary is printed)')

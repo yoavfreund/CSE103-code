@@ -1,0 +1,18 @@
+cse-dhcp-10-105:MeasuringRunTime yoavfreund$ python runTimeSampling.py -s 0.001 -n 1000
+{'Iteration_Length': 100, 'sample_step': 0.001, 'log': False, 'n': 1000}
+App Started
+app stopped after  15.4149098396 seconds
+Total1= 4.64, Total2= 7.67, Total3= 3.10
+Sum Total= 15.4149048328
+Frac1= 0.30, Frac2= 0.50, Frac3= 0.20
+[295, 503, 201]
+1: 0.295	2: 0.504	3: 0.201
+cse-dhcp-10-105:MeasuringRunTime yoavfreund$ python runTimeSampling.py -s 0.001 -n 1000
+{'Iteration_Length': 100, 'sample_step': 0.001, 'log': False, 'n': 1000}
+App Started
+app stopped after  14.5272908211 seconds
+Total1= 4.37, Total2= 7.24, Total3= 2.91
+Sum Total= 14.5272848606
+Frac1= 0.30, Frac2= 0.50, Frac3= 0.20
+[308, 495, 196]
+1: 0.308	2: 0.495	3: 0.196
