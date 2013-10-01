@@ -8,14 +8,24 @@ def running_average(n,m,p):
     whose probability of landing '1' is p.
 
     """
-    aver=zeros((n,m))
+    aver=zeros((n,m)) # define a numpy array of size nXm filled with zeros.
     for j in range(m):
-        outcomes=[(1 if random()<p else 0) for i in range(n)]
+        # using python list comrehension create a list of length n
+        # where each entry is 1 with probability p and zero with
+        # probability 1-p
+        outcomes=[(1 if random()<p else 0) for i in range(n)] 
+        # Compute the cumulative sum of the list "outcomes".
+        # i.e. outcomes[0], outcomes[0]+outcomes[1], outcomes[0]+outcomes[1]+outcomes[2], ... 
         c=cumsum(outcomes)
+        # Using python list comprehension compute the average for each prefix of outcomes.
+        # this is also called the "running average"
         aver[:,j] = [c[i]/(i+1.0) for i in range(len(c))]
     return aver;
 
 def envelope(n,p):
+    """Compute the envelope the bounds the running average sequences from
+    below and above with high probability
+    """
     env=zeros((n,3))
     env[:,1]=[p for i in range(n)]
     env[:,0]=[p+0.5/sqrt(i+1.0) for i in range(n)]
@@ -28,19 +38,25 @@ def envelope(n,p):
 n=10000 # length of sequence
 m=10      # number of sequences
 
+# create the plot as a pdf file
 pdf = PdfPages('averages'+str(n)+'.pdf')
 
+#create plotes
 plot(running_average(n,m,0.02),'r')
 plot(envelope(n,0.02),'g')
 
 plot(running_average(n,m,0.0175),'b')
 plot(envelope(n,0.0175),'k')
 
+# define the y axis upper and lower limits.
 ylim((0.01,0.03))
 
+#define the title the x label and the y label for the firgure.
 title('n='+str(n))
 xlabel('number of coin flips')
 ylabel("fraction of 1's")
+
+# save and close figure file.
 savefig(pdf, format='pdf') # note the format='pdf' argument!
 close()
 pdf.close()
