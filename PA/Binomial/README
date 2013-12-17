@@ -1,0 +1,104 @@
+SE103 Programming Assignment 2: Binomial Distribution
+Due Monday Nov 4th 1pm. Make sure you turn it in before class.
+
+In the second programming assignment, you will write a program for computing and for approximating the binomial distribution in several ways
+
+
+Setup
+=====
+Make sure you prep first.  Type in:
+	prep cs103f
+
+You should all have an account to log in and get access to the public folder by now. Log in to your account and open a new terminal window. In your home directory, create a new directory called pa2 and go into that directory:
+        mkdir ~/pa2
+        cd pa2
+
+Copy all the files from the Binomial folder in the public directory that will provide the sample code(in Python only) for this assignment. Notice the single dot at the end of this command. The dot means the current working directory, which is pa1 after you executed the cd command above.
+        cp home/linux/ieng6/cs103f/public/Binomial/* .
+
+You can choose whatever programming language you would like.  But the executable (after you compile: for python this is the file itself) must be named "Binomial".  
+
+Please use Python, Java, C, or C++
+
+We won't be building your source, just running your executable.  But please include the source with your submission for partial credit.  
+
+If you would like to write your program in some other languages, please talk to us first before you start programming.
+
+*** NOTE: For this assignment, it's highly encouraged that you use python.  
+    We've written most of the code for you in python, you'll just need to add a few lines.  
+    You might find the random.random() function useful.
+    Otherwise, you should only need to write for loops, multiplication, division, etc.
+***
+
+Your task
+=========
+
+You will be writing a program to compute the exact probability, sample probability, and chebyshev bound of heads coming up in a sequence of coin flips. The call signature for the program will be:
+
+./Binomial -t <type>  -n <length of sequence> -p <p> -m <number of sequences> -l <low> -h <high>
+
+Some more detail on the flags:
+
+-n <length of sequence>:
+
+the number of coins that are flipped
+
+-p <p>:
+
+the probability of heads (X_i=1)
+
+-m <m>:
+
+the number of sequences that are generated (relevant only for type=sample, see below)
+
+-l <low>, -h <High>:
+
+the range whose probability is to be calculated. For example, if low = 3 and high = 5, you will be calculating the probability of having between 3 and 5 heads (inclusive) come up
+
+-t <type>:
+
+will be either exact, sample, or chebyshev
+
+-- exact: perform exact calculation of the probability, that the number of heads shown up will be between low and high, using the binomial formula. When the input of -t is exact, you should expect four more inputs -n, -p, -l, and -u
+
+-- sample: generate m sequences of length m, output the sum for each sequence and output the number of times the sum is in the range. When the input of -t is sample, you should expect five more inputs -n, -p, -l, -u, and -m
+
+-- chebyshev: compute a bound using Chebyshev (use either <high> or <low> if is below or above the mean). Output 1 if the range contains the mean. When the input of -t is chebyshev, you should expect four more inputs -n, -p, -l, and -u
+
+
+Sample input/ouput:
+
+python Binomial -t exact -n 10 -p 0.2 -l 3 -u 4
+0.289406976
+
+python Binomial -t sample -n 10 -p 0.2 -l 3 -u 4 -m 10000
+0.2984
+
+python Binomial -t sample -n 10 -p 0.2 -l 3 -u 4 -m 10000
+0.2856
+
+python Binomial -t chebyshev -n 10 -p 0.2 -l 3 -u 4
+1.6
+
+
+
+Test your program
+=================
+
+After you finish the assignment, you can test your program against a tester script before you turn it in by running:
+
+BinomialTestCases
+
+For this to work, you'll need to make sure your binomial script is named Binomial, and can be executed as ./Binomial.  
+
+If you get permissions issues, execute
+	chmod 777 Binomial
+
+Submission
+==========
+
+When you are happy with your program, run the following command to turn it in:
+
+tar zcvf - . | turnin -c cs103f
+
+Congratulation! You are done with assignment2. See you in class.

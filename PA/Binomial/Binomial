@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+import argparse
+import random
+from operator import mul
+
+parser = argparse.ArgumentParser(description='')
+parser.add_argument('-t','--type', help='exact, sample, chebyshev', type=str)
+parser.add_argument('-n','--length', help='length of sequence', type=int)
+parser.add_argument('-p','--p_heads', 
+    help='The probability one flip of the coin turns up heads', type=float)
+parser.add_argument('-m','--number_sequences', help='The number of coin flip sequences', type=int)
+parser.add_argument('-l','--lower', help='The lower end of the range whose probability is to be calculated', type=int)
+parser.add_argument('-u','--upper', help='The upper end of the range whose probability is to be calculated', type=int)
+args = vars(parser.parse_args())
+
+# You can get the command line argument by indexing into the args dict.  
+# Eg to get -p, args['p_heads'].  Or -m, args['number_sequences']
+
+if args['type'] == 'exact': 
+    # TODO Compute the sum of the binomial terms here, and save to variable
+    # binom_sum
+    binom_sum = 1
+    print binom_sum
+
+elif args['type'] == 'sample':
+    # TODO Take args['number_sequences'] samples, to approximate the probability
+    # the number of heads lands in the range 
+    #   args['lower'] <= #heads <= args['upper']
+    # Each sample will give the number of biased coin flips out of args['length']
+    #   that come up heads
+    # and save to variable binom_sum
+    # binom_sum
+    binom_sum = 1
+    print binom_sum
+
+elif args['type'] == 'chebyshev':
+    # Compute an ***upper-bound*** on the probability #heads is between 
+    # lower and upper, using chebyshev
+    binom_sum = 1
+    print binom_sum

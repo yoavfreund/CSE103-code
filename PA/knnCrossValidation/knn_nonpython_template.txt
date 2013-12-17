@@ -1,0 +1,40 @@
+## This is a skeleton code for students who do not use Python.
+
+
+# Output dataset files for each fold.
+def partition_train_test():
+	read in digits.txt
+	for each i in 1 .. M
+		choose a proper training/test partition
+		write the training data into train_data_[i].txt
+		write the training label into train_label_[i].txt
+		write the test data into test_data_[i].txt
+		write the test label into test_label_[i]_true.txt
+
+# Run knn classifier for the chosen k and the chosen fold.
+function run_knn(k, i):
+	Run executable with the proper training set and test set. For example, with the following command:
+	"./knn_fit.py --train_data train_data_[i].txt --train_label train_label_[i].txt --test_data test_data_[i].txt --test_label test_label_[i]_[k]_predicted.txt -k k"
+
+# Return the percentage of prediction errors.
+function compute_test_error_rate(k, i):
+	read in test_label_[i]_[k]_predicted.txt
+	read in test_label_[i]_[k]_true.txt
+	compare the two
+	return test error rate
+
+MAIN:
+
+	partition_train_test()
+
+	for each i in 1 .. M
+		for each k in [3,5,7,9,11]
+			run_knn(k, i)
+			error = compute_test_error_rate(k, i)
+			fill in the error rate table
+
+	compute the average test error over all folds for each k
+	
+	choose the best k based on the average test error rate
+	
+	output result

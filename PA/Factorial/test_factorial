@@ -1,0 +1,77 @@
+#!/bin/env python
+
+from subprocess import Popen
+import subprocess
+import argparse
+import os.path
+import sys
+import math
+
+
+def unsupported_error():
+    return "ERROR: Unsupported langauge."
+
+def compile_error():
+    return "ERROR: Failed to compile. Make sure your file exists and compiled correctly."
+
+# Compiles the source file and returns executable command.
+def preprocess(source):
+    basename =os.path.splitext(source)[0]
+    extension = os.path.splitext(source)[1][1:]
+    if extension == 'py':
+        # check if file exists
+        if os.path.isfile(source):
+            return (0, "python %s"%source)
+        else:
+            return (1, compile_error())
+    elif extension in ['c', 'cpp']:
+        proc = Popen("gcc -o %s %s > /dev/null 2>&1"%(basename, source), shell=True)
+        return_code = proc.wait()
+        if return_code > 0:
+            return (1, compile_error())
+        else:
+            return (0, "./%s"%basename)
+    elif extension == 'java':
+        proc = Popen("javac %s > /dev/null 2>&1"%source, shell=True)
+        return_code = proc.wait()
+        if return_code > 0:
+            return (1, compile_error())
+        else:
+            return (0, "java %s"%basename)
+    else:
+        return (1, unsupported_error())
+
+# Runs the executable against test cases.
+def testcases(exe):
+    try:
+        result = True
+        for n in [1,5,10,15]:
+            print("Testing N=%2d"%n),
+            proc = Popen(exe + ' ' + str(n), shell=True, stdout=subprocess.PIPE)
+            proc.wait()
+            answer = proc.communicate()[0]
+            if int(answer) == math.factorial(n):
+                print("...CORRECT")
+            else:
+                print("...INCORRECT")
+                result = False
+        return result
+    except:
+        print("ERROR: Something went wrong...")
+        return False
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser("Tester script for factorial assignment")
+    parser.add_argument('sourcefile', 
+                        type=str, 
+                        help='Your source file that has one of the following extensions: .py, .c, .cpp, java')
+    args = parser.parse_args()
+
+    print 'Preprocessing...'
+    (status, data) = preprocess(args.sourcefile)
+    if status > 0:
+        print data
+        sys.exit(1)
+    
+    print 'Start testing...'
+    testcases(data)

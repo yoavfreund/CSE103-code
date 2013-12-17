@@ -1,0 +1,95 @@
+CSE103 Programming Assignment 1
+===============================
+
+Welcome to the first programming assignment of CSE103. This assignment
+is to allow you to get familiar with your account on ieng6 and the
+assignment submission process, so that you will be more comfortable in
+the later assignments. Don't get too excited, you need to read this
+README first before you start coding. Here we go.
+
+
+Setup
+=====
+
+First of all, you need to get your ieng6 account for CSE103. Go to:
+
+	https://sdacs.ucsd.edu/~icc/index.php
+
+Log in using your PID and look for your CSE103 ieng6 account. It would
+either be cs103*** or your username. Great! Now you can log in.
+
+After you login successfully, in your home directory, create a new
+directory called pa1 and go into that directory:
+
+	mkdir ~/pa1
+	cd pa1
+
+Copy all the files for this assignment from ../public/factorial using
+the following command. Notice the single dot at the end of this
+command. The dot means the current working directory, which is pa1
+after you executed the cd command above.
+
+	cp ~/../public/factorial/* .
+
+You can choose your favorite programming language from the list below
+and please name your file accordingly:
+
+	Python (skeleton code provided) ------ factorial.py
+	Java ------ factorial.java
+	C ------ factorial.c
+	C++ ------factorial.cpp
+
+If you would like to write your program in some other languages,
+please talk to us first before you start programming.
+
+
+Your task
+=========
+
+       Write a program that reads an integer N as an argument from
+       command line and outputs N! to the standard output.
+
+Examples:
+
+> python factorial.py 3
+> 6
+
+> ./factorial 3
+> 6
+
+> java factorial 3
+> 6
+
+PAY ATTENTION HERE: 
+1. Your output should be NUMBER only. No need to
+format, just print the solution of factorial. If you include anything
+other than number you may not get full credit.  
+2. Don't use any built-in function, just write your own factorial function.
+3. Your program should output correctly for 0 <= N < 20.
+
+
+Test your program
+=================
+
+After you finish the assignment, you can test your program
+against a tester script before you turn it in by running:
+
+test_factorial <your-source-file>
+
+e.g.
+
+test_factorial factorial.py
+
+
+Submission
+==========
+
+When you are happy with your program, run the following command to turn it in:
+
+tar zcvf - <your-source-file> | turnin -c cs103f 
+
+e.g.
+
+tar zcvf - factorial.py | turnin -c cs103f 
+
+Congratulation! You are done. We will see you next week.

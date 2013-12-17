@@ -1,0 +1,95 @@
+CSE103 Programming Assignment 4: Percentile
+
+Welcome to the fourth programming assignment of CSE103. The due time is Wednesday, 11/27, 11:59 pm.
+
+This assignment uses randomized algorithm to find the 1/2-percentile(median) of a list of numbers. We will explore a variant of the randomized algorithm that was presented in class and measure the performance of the algorithm. In class we gave an upper bound on the expected running time, here we will estimate the actual expected value as well as the standard deviation.
+
+Please read lecture slides 11/15/13 and notes carefully before you start this assignment.
+
+Setup
+
+You should all have your cs103f account set up. After you login to your cs103 account, in your home directory, create a new directory called pa4 and go into that directory:
+
+    mkdir ~/pa4
+    cd pa4
+Copy all the files for this assignment from ../public/Percentile using the following command. Notice the single dot at the end of this command. The dot means the current working directory, which is pa4 after you executed the cd command above.
+
+     cp /home/linux/ieng6/cs103f/public/Percentile/* .
+As PA3 this script depends on numpy which is not installed on ieng6, for now we use a virtualenv. Run the following commands to activate the virtualenv:
+
+   source /home/linux/ieng6/cs103f/public/virtualenv-1.10/myVE/bin/activate
+After this, you will see (myVE) appear before the prompt.
+
+The program will generate a plot. You need to have X-windows to view the plot. If you don't have X-windows, you can download FileZilla to get the png from the server to your local computer. In the FileZilla, do the following:
+
+host: ieng6.ucsd.edu
+
+username: <your ieng6 account>
+
+password: <your ieng6 account password>
+
+port: 22
+
+Task
+
+Your task in this assignment is to write a python program that implements the Randomized Algorithm for computing the 1/2-percentile of a list of random integers of length N and investigate the running time as a function of N.
+
+Specifically, the program generates a random list S of integers of length N, then run the randomize algorithm to find the percentile of S. This process is repeated for 500 times and the number of comparisons (running time) Ci for each run is recorded. For each N=10, 100, 500, 1000, 2000, the average and the standard deviation of Ci is outputted along with the estimated running time as a function of N. Also, you will see a plot of N and the number of comparisons (running time).
+
+The only file you will write code in is percentile.py. There are three parts you need to fill in, make sure you only write code in the block where you see:
+
+    # TODO:
+You are expected to do the following: 
+
+Implement the function split
+Implement the function find_kth_smallest using the function split
+Implement the function average_runtime
+Some python functions you can use in PA4:
+np.mean(x): Computes the arithmetic mean of list x.
+np.std(x): Computes the standard deviation of list x.
+CustomInt.reset_compare_count(): Reset the count of the comparison.
+CustomInt.get_compare_count(): Get the count of the comparison.
+
+Here are some detail about each functions:
+split(s,v):
+	take a list 's' and a pivot 'v', split the list 's' in to three sublists s_l, s_v, and s_r. 
+	s_l contains all elements from `s` that are less than `v`.
+	s_v contains all elements from `s` that are equal to `v`.
+	s_r contains all elements from `s` that are greater than `v`.
+	return (s_l, s_v, s_r)
+
+find_kth_smallest(s,k,c):
+	Takes a list 's', an integer 'k', and an integer 'c' which is used for selecting the pivot.
+	In this implementation, the pivot v is the median of a randomly selected sample of length 'c' from 's'. If 'c' is 1, it is equivalent to using a randomly selected element from 's' as the pivot(as described in class).
+	Then use randomize algorithm from the lecture to find the 'k'th smallest element in 's' with the pivot v.
+
+average_runtime(n,rep,p,c):
+	Takes integer 'n', integer 'rep', float 'p', and integer 'c'. It generates a list of random integers of length 'n' and run the find_kth_smallest process repeatedly 'rep' times using k=pn. Record the number of comparisons(running time) for each run then calculate the average and the standard deviation of the number of comparisons(running time). Return the average and standard deviation.
+main(c):
+	Parse in the input of c, set n = 10, 100, 500, 1000, 2000 with 'rep' be 500 and 'p' be 0.5. Prints the n, average, std for each n, and also the overall estimate running time. A plot will be generated with n as the x-axis and the number of comparisons as the y-axis.
+
+If you are having trouble understanding the assignment, please come to TAs' and tutors' office hours or post questions on piazza with tag pa4.
+Test
+
+Test your function on different value of 'c' and see how the average comparison time(running time) changes on different 'c'.
+Type in:
+     python percentile.py -c [your choice of c]
+Your output for c=1 should be similar to the following:
+
+     10 36.42 13.14
+     100 474.92 143.94
+     500 2475.54 746.04
+     1000 4999.64 1480.53
+     2000 10047.06 2999.99
+     The average running time is 5.03n
+A plot will be generated. Open the plot by typing:
+
+  gthumb percentile_c_1.png
+If you can't open the plot using gthumb, download FileZilla to view the plot. Read the detail in the setup.
+
+Submission
+
+After you generated the output file, run the following command to turn it in:
+
+      turnin -c cs103f percentile.py
+Congratulation! You are done with your PA4.
