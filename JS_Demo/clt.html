@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.1/jquery.flot.min.js"></script>
+<script src="random-0.26.js"></script>
+<script src="jstat-1.0.0.min.js"></script>
+<meta charset=utf-8 />
+<title>Central Limit Theorem</title>
+</head>
+<body>
+  <h1>CLT simulation</h1>
+  <div>
+    We denote a sample average by <img alt="S_n = (\textstyle
+\sum_{i=1}^n X_i)/ n"
+src="http://www.texify.com/img/%5CLARGE%5C%21S_n%20%3D%20%28%5Ctextstyle%20%5Csum_%7Bi%3D1%7D%5En%20X_i%29/%20n.gif"
+align=center border=0> where 
+<img alt="X_i"
+src="http://www.texify.com/img/%5CLARGE%5C%21X_i.gif" align=center
+border=0>'s are random variables drawn IID from one of the following
+distributions:
+    <div style="margin:10px;">
+      <div style="width:600px;">
+	<input type="radio" name="dist" value="uniform"> Uniform(a,b). The pdf is given by:<br>
+	<div style="margin-top:30px; margin-left:30px;">
+	  <img src="http://latex.codecogs.com/gif.latex?%5Cinline%20%5Cdpi%7B150%7D%20f%28x%29%20%3D%20%5Cbegin%7Bcases%7D%5Cfrac%7B1%7D%7Bb-a%7D%20%26%5Cmbox%7B%20if%20%7D%20a%20%5Cle%20x%20%5Cle%20b%5C%5C0%20%26%5Cmbox%7B%20otherwise%20%7D%5Cend%7Bcases%7D"><br>
+	  where
+	</div>
+	<ul>
+	  <li>a: <input type="text" id="uniform_a" value="-2"></li>
+	  <li>b: <input type="text" id="uniform_b" value="2"></li>
+	</ul>
+      </div>
+      <div style="width:600px;">
+	<input type="radio" name="dist" value="exponential">
+	Exponential(<img alt="\lambda"
+	src=http://www.texify.com/img/%5CLARGE%5C%21%5Clambda.gif
+	align=center border=0>). The pdf is given by:<br>
+	<div style="margin-top:30px; margin-left:30px;">
+	  <img src="http://latex.codecogs.com/gif.latex?%5Cinline%20%5Cdpi%7B150%7D%20f%28x%29%20%3D%20%5Cbegin%7Bcases%7D%5Clambda%20e%5E%7B-%5Clambda%20x%7D%26%5Cmbox%7B%20if%20%7D%20x%20%5Cge%200%5C%5C0%20%26%5Cmbox%7B%20if%20%7D%20x%20%3C%200%5Cend%7Bcases%7D"><br>
+	  where
+	</div>
+	<ul>
+	  <li><img alt="\lambda"
+	  src=http://www.texify.com/img/%5CLARGE%5C%21%5Clambda.gif
+	  align=center border=0>: <input type="text" id="expo_lambda"
+	  value="0.1"></li>
+	</ul>
+      </div>
+      <div style="width:600px;">
+	<input type="radio" name="dist" value="normal"> Normal(<img alt="\mu" src=http://www.texify.com/img/%5CLARGE%5C%21%5Cmu.gif align=center border=0>, <img alt="\sigma" src=http://www.texify.com/img/%5CLARGE%5C%21%5Csigma.gif align=center border=0>).
+	The pdf is given by<br>
+	<div style="margin-top:30px; margin-left:30px;">
+	  <img src="http://latex.codecogs.com/gif.latex?%5Cinline%20%5Cdpi%7B150%7D%20f%28x%29%20%3D%20%5Cfrac%7B1%7D%7B%5Csigma%20%5Csqrt%7B2%5Cpi%7D%7D%20e%5E%7B-%28x-%5Cmu%29%5E2/%282%5Csigma%5E2%29%7D"><br>
+	  where
+	</div>
+	<ul>
+	  <li><img alt="\mu" src=http://www.texify.com/img/%5CLARGE%5C%21%5Cmu.gif align=center border=0>: <input type="text" id="normal_mu" value="0"></li>
+	  <li><img alt="\sigma" src=http://www.texify.com/img/%5CLARGE%5C%21%5Csigma.gif align=center border=0>: <input type="text" id="normal_sigma" value="1"></li>
+	</ul>
+      </div>
+      <div style="width:600px;">
+	<input type="radio" name="dist" value="pareto"> Pareto(<img alt="\alpha" src=http://www.texify.com/img/%5CLARGE%5C%21%5Calpha.gif align=center border=0>). The pdf is given by<br>
+	<div style="margin-top:30px; margin-left:30px;">
+	  <img src="http://latex.codecogs.com/gif.latex?%5Cinline%20%5Cdpi%7B150%7D%20f%28x%29%20%3D%20%5Cbegin%7Bcases%7D%20%5Cfrac%7B%5Calpha%7D%7Bx%5E%7B%5Calpha&plus;1%7D%7D%20%26%5Cmbox%7B%20if%20%7D%20x%20%5Cge%201%5C%5C%200%20%26%5Cmbox%7Botherwise%7D%20%5Cend%7Bcases%7D"><br>
+	  where
+	</div>
+	<ul>
+	  <li><img alt="\alpha" src=http://www.texify.com/img/%5CLARGE%5C%21%5Calpha.gif align=center border=0>: <input type="text" id="pareto_alpha" value="2"></li>
+	</ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="clear: left; margin: 20px; border: 1px solid black; padding:20px; width: 350px;">
+      Let <img alt="T_n = (S_n - A)/B"
+	       src=http://www.texify.com/img/%5CLARGE%5C%21T_n%20%3D%20%28S_n%20-%20A%29/B.gif
+	       align=center border=0>
+      <ul>
+	<li><img alt="n"
+		 src=http://www.texify.com/img/%5CLARGE%5C%21n.gif align=center
+		 border=0> = <input type="text" id="n" value="100"></li>
+	<li>Number of samples = <input type="text" id="m" value="2500"></li>
+	<li>Number of bins = <input type="text" id="bins" value="20"></li>
+	</ul>
+    <button id="generate">Generate</button><br>
+  </div>
+
+  <div id="adjust" style="border: 2px dashed blue; clear: left; padding:10px; margin:50px; width: 500px;">
+    Try to adjust A and B so that the histogram and the CDF are right on top of the standard normal distribution.<br>  
+    A: <input type="text" id="shift" value="0.0"><br>
+    B: <input type="text" id="scale" value="1.0"><br>
+    <button id="redraw">Update</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <div id="placeholder_pdf" style="float:left; width:600px;height:300px;margin:20px;margin-bottom:100px;"></div>
+  <div id="placeholder_cdf" style="float:left; width:600px;height:300px;margin:20px;margin-bottom:100px;"></div>
+
+<script>
+
+function gen_norm_pdf() {
+    var range = jstat.seq(-5,5,100);
+    var densities = jstat.dnorm(range, 0.0, 1.0);
+    var data = [];
+    for (var i = 0; i < range.length; i++) {
+	data.push([range[i], densities[i]]);
+    }
+    return data;
+}
+
+function gen_norm_cdf() {
+    var range = jstat.seq(-5,5,100);
+    var densities = jstat.pnorm(range, 0.0, 1.0);
+    var data = [];
+    for (var i = 0; i < range.length; i++) {
+	data.push([range[i], densities[i]]);
+    }
+    return data;
+}
+
+
+function gen_uniform(n,m,a,b) {
+    a = parseFloat(a);
+    b = parseFloat(b);
+    n = parseFloat(n);
+    m = parseFloat(m);
+    var r = new Random();
+    var vals = [];
+    for (var i = 0 ; i < m; i++) {
+	var s = 0.0;
+	for (var j = 0 ; j < n; j++) {
+	    s += parseFloat(r.uniform(a,b));
+	}
+	vals.push(s / n);
+    }
+    return vals;
+}
+
+function gen_exponential(n,m,lambda) {
+    lambda = parseFloat(lambda);
+    n = parseFloat(n);
+    m = parseFloat(m);
+    var r = new Random();
+    var vals = [];
+    for (var i = 0 ; i < m; i++) {
+	var s = 0.0;
+	for (var j = 0 ; j < n; j++) {
+	    s += parseFloat(r.exponential(lambda));
+	}
+	vals.push(s / n);
+    }
+    return vals;
+}
+
+function gen_pareto(n,m,alpha) {
+    alpha = parseFloat(alpha);
+    n = parseFloat(n);
+    m = parseFloat(m);
+    var r = new Random();
+    var vals = [];
+    for (var i = 0 ; i < m; i++) {
+	var s = 0.0;
+	for (var j = 0 ; j < n; j++) {
+	    s += parseFloat(r.pareto(alpha));
+	}
+	vals.push(s / n);
+    }
+    return vals;
+}
+
+function gen_normal(n,m,mu,sigma) {
+    mu = parseFloat(mu);
+    sigma = parseFloat(sigma);
+    n = parseFloat(n);
+    m = parseFloat(m);
+    var r = new Random();
+    var vals = [];
+    for (var i = 0 ; i < m; i++) {
+	var s = 0.0;
+	for (var j = 0 ; j < n; j++) {
+	    s += parseFloat(r.normal(mu,sigma));
+	}
+	vals.push(s / n);
+    }
+    return vals;
+}
+
+function make_cdf(vals) {
+    var range = vals.slice().sort(function(a,b) {return a-b});
+    			    
+    var w = 1.0/range.length;
+    var xy = [];
+    for (var j=0; j < range.length; j++) {
+	xy.push([range[j], j*w]);
+    }
+    return xy;
+}
+
+function make_hist(vals,bins) {
+    var min_val = vals[0];
+    var max_val = vals[0];
+    for (var i=0; i < vals.length; i++) {
+	if (vals[i] < min_val) min_val = vals[i];
+	if (vals[i] > max_val) max_val = vals[i];
+    }
+    var range = [];
+    var hist_data = [];
+    var bin_size = (max_val - min_val) / bins;
+    for (var j=0; j < bins; j++) {
+	range[j] = min_val + bin_size/2 + bin_size*j; 
+	hist_data[j] = 0;
+    }
+    var w = 1.0/(vals.length * bin_size);
+    for (var i=0; i < vals.length; i++) {
+	var bin_idx = Math.floor((vals[i] - min_val) / bin_size);
+	hist_data[bin_idx] += w;
+    }
+    var xy = [];
+    for (var j=0; j < bins; j++) {
+	xy.push([range[j], hist_data[j]]);
+    }
+    return xy;
+}
+
+function plot_dist(vals, scale, shift) {
+    // shift and scale
+    scale = parseFloat(scale);
+    shift = parseFloat(shift);
+    var normalized_vals = [];
+    for (var i=0; i < vals.length; i++) {
+	normalized_vals.push((vals[i] - shift)/scale);
+    }
+    var series_pdf = [];
+    var series_cdf = [];
+    series_pdf.push({ data: norm_pdf,
+		      color: '#CCCCCC',
+		      lines: { show:true, fill:false },
+                      label: 'standard normal pdf'
+		      });
+    series_pdf.push({ data: make_hist(normalized_vals, $('#bins').val()),
+		      color: '#FF0000',
+		      lines: { show:true, fill:false },
+                      label: 'T_n (histogram)'
+		      });
+    series_cdf.push({ data: norm_cdf,
+		      color: '#CCCCCC',
+		      lines: { show:true, fill:false },
+                      label: 'standard normal cdf'
+		      });
+    series_cdf.push({ data: make_cdf(normalized_vals),
+		      color: '#00CC00',
+		      lines: { show:true, fill:false },
+                      label: 'T_n (cdf)'
+		      });
+
+    $.plot($("#placeholder_pdf"), series_pdf, null);
+    $.plot($("#placeholder_cdf"), series_cdf, null);
+    $('#adjust').show();
+}
+
+$(document).ready(function() {
+
+    //$('.params').hide();
+    $('#adjust').hide();
+ 
+    norm_pdf = gen_norm_pdf();
+    norm_cdf = gen_norm_cdf();
+ 
+    $('#generate').click(function() {
+	var selected_dist = $('input[name=dist]:radio:checked').val(); 	     
+	if (selected_dist == 'uniform') {
+	    vals = gen_uniform($('#n').val(),
+			       $('#m').val(),
+			       $('#uniform_a').val(),
+			       $('#uniform_b').val());
+	    plot_dist(vals, 
+		      $('#scale').val(), 
+		      $('#shift').val());
+	}
+	else if (selected_dist == 'exponential') {
+	    vals = gen_exponential($('#n').val(),
+				   $('#m').val(),
+				   $('#expo_lambda').val());
+	    plot_dist(vals, 
+		      $('#scale').val(), 
+		      $('#shift').val());
+	}
+	else if (selected_dist == 'normal') {
+	    vals = gen_normal($('#n').val(),
+			      $('#m').val(),
+			      $('#normal_mu').val(),
+			      $('#normal_sigma').val());
+	    plot_dist(vals, 
+		      $('#scale').val(), 
+		      $('#shift').val());
+	}
+	else if (selected_dist == 'pareto') {
+	    vals = gen_pareto($('#n').val(),
+			      $('#m').val(),
+			      $('#pareto_alpha').val());
+	    plot_dist(vals, 
+		      $('#scale').val(), 
+		      $('#shift').val());
+	}
+    });
+
+    $('#redraw').click(function() {
+	if (vals) {
+	    plot_dist(vals, 
+		      $('#scale').val(), 
+		      $('#shift').val());
+	}
+    });
+
+    $('#reset').click(function() {
+	$('#scale').val(1.0);
+	$('#shift').val(0.0);
+	if (vals) {
+	    plot_dist(vals, 
+		      $('#scale').val(), 
+		      $('#shift').val());
+	}
+    });
+
+
+
+}
+
+);
+</script>
+</body>
+</html>

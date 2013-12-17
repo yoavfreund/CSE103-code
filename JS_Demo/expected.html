@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.1/jquery.flot.min.js">
+</script>
+<meta charset=utf-8 />
+<title>Expected value</title>
+</head>
+<body>
+  <div>
+    Let X be a random variable whose probability distribution is defined as
+    <img alt="P(X=i) = \begin{cases} \frac{1}{|i|^\alpha} &\mbox{if } i \ne 0 \\0 & \mbox{if } i = 0. \end{cases}" src=http://www.texify.com/img/%5CLARGE%5C%21P%28X%3Di%29%20%3D%20%5Cbegin%7Bcases%7D%20%5Cfrac%7B1%7D%7B%7Ci%7C%5E%5Calpha%7D%20%26%5Cmbox%7Bif%20%7D%20i%20%5Cne%200%20%5C%5C0%20%26%20%5Cmbox%7Bif%20%7D%20i%20%3D%200.%20%5Cend%7Bcases%7D.gif align=center border=0><br>
+  </div>
+  α: <input type="text" id="alpha" value="2"><br>
+  Number of trajectories: <input type="text" id="numTraj" value="5"><br>
+  Number of data points: <input type="text" id="numData" value="10000"><br>
+  <button id="run">Run</button>
+  <div id="placeholder" style="width:600px;height:300px"></div>
+<script>
+function create_cdf(N, alpha) {
+  var cdf = [];
+  cdf[0] = 0.0;
+  for (var i=1; i < 2*N+1; i++) {
+    var p;
+    if (i==N) p = 0;
+    else p = 1.0 / (Math.pow(Math.abs(-N+i), alpha));
+    cdf[i] = cdf[i-1] + p;
+  }
+  return cdf; 
+}
+
+function random_draw(cdf) {
+  var L = cdf.length;
+  var N = (L - 1) / 2;
+  var ub = cdf[L - 1];
+  var r = Math.random() * ub;
+  var i = 0;
+  while (r > cdf[i]) i++;
+  return i - N;
+}
+
+
+$(document).ready(function() { 
+    $('#run').click(function() {
+	var cdf = create_cdf(10000, $('#alpha').val());
+	var n = $('#numData').val();
+	var all_data = [];
+	var ymin = 0, ymax = 0;
+	for (var j=0; j < $('#numTraj').val(); j++) {
+	    var data = [];
+	    var sum_d = 0.0;
+	    for (var i=0; i < n; i++) {
+		var d = random_draw(cdf);
+		sum_d += d;
+		data[i] = [i, sum_d/(1.0+i)];
+		if (i > n/2 && data[i][1] < ymin) {
+		    ymin = data[i][1];
+		}
+		if (i > n/2 && data[i][1] > ymax) {
+		    ymax = data[i][1];
+		}
+	    }
+	    all_data.push({ data: data, 
+			    lines: { show: true, fill: false }
+			  });
+	}
+		
+	var options = null;
+	if ($('#numData').val() > 100) {
+	    options = { yaxis: { min: -6, max: 6 } };
+	} 
+
+	$.plot($("#placeholder"), all_data, options);
+    });
+});
+</script>
+</body>
+</html>
